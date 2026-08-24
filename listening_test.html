@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>ChoreoAssist 音源分离盲听测评</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18201d;
+      --muted: #66706b;
+      --line: #d8ddd9;
+      --surface: #ffffff;
+      --page: #f4f6f4;
+      --accent: #087f5b;
+      --accent-dark: #056143;
+      --warm: #a43f22;
+      --focus: #ffbf47;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--page);
+      color: var(--ink);
+      font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      letter-spacing: 0;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 24px 0 16px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .header-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 4px;
+      font-size: 24px;
+      line-height: 1.25;
+    }
+
+    h2 {
+      margin-bottom: 6px;
+      font-size: 20px;
+    }
+
+    h3 {
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .session {
+      display: grid;
+      grid-template-columns: auto minmax(160px, 220px);
+      align-items: center;
+      gap: 8px;
+    }
+
+    .session input {
+      min-width: 0;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 10px;
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .progress-track {
+      height: 6px;
+      margin-top: 18px;
+      overflow: hidden;
+      background: #e1e5e2;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background: var(--accent);
+      transition: width 160ms ease;
+    }
+
+    main {
+      padding: 24px 0 40px;
+    }
+
+    .task-meta {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .task-meta p {
+      margin-bottom: 0;
+      max-width: 760px;
+    }
+
+    .stem-label {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 4px 10px;
+      border: 1px solid #b9c3bd;
+      border-radius: 999px;
+      background: var(--surface);
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .reference {
+      display: grid;
+      grid-template-columns: 160px minmax(220px, 520px) auto;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    audio {
+      display: block;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .loop-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .candidates {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding: 22px 0;
+    }
+
+    .candidates[data-count="3"] {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .candidate {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--accent);
+      border-radius: 6px;
+      background: var(--surface);
+    }
+
+    .candidate audio {
+      margin-bottom: 18px;
+    }
+
+    .rating {
+      padding: 13px 0;
+      border-top: 1px solid #e6e9e7;
+    }
+
+    .rating-head,
+    .rating-scale {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .rating-head {
+      margin-bottom: 3px;
+      font-weight: 650;
+    }
+
+    .rating-description {
+      min-height: 34px;
+      margin: 0 36px 7px 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .score {
+      min-width: 28px;
+      color: var(--accent-dark);
+      text-align: right;
+    }
+
+    .score.empty {
+      color: var(--warm);
+      font-weight: 500;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .rating-scale {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .preference {
+      padding: 20px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .choice-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 40px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+
+    .choice-row input {
+      accent-color: var(--accent);
+    }
+
+    .validation {
+      min-height: 24px;
+      margin: 12px 0 0;
+      color: var(--warm);
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 16px;
+    }
+
+    button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px 16px;
+      background: var(--surface);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    button.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 650;
+    }
+
+    button.primary:hover {
+      background: var(--accent-dark);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .complete {
+      padding: 28px 0;
+    }
+
+    .summary-table {
+      width: 100%;
+      margin: 20px 0;
+      border-collapse: collapse;
+      background: var(--surface);
+    }
+
+    .summary-table th,
+    .summary-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .summary-table th {
+      background: #e9eeea;
+    }
+
+    .error {
+      padding: 20px;
+      border-left: 4px solid var(--warm);
+      background: #fff5f1;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 820px) {
+      .header-row,
+      .task-meta {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+
+      .session {
+        grid-template-columns: 82px minmax(0, 1fr);
+      }
+
+      .reference {
+        grid-template-columns: 1fr;
+      }
+
+      .candidates {
+        grid-template-columns: 1fr;
+      }
+
+      .actions button {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell">
+      <div class="header-row">
+        <div>
+          <h1>音源分离盲听测评</h1>
+          <div id="progressText" class="muted">载入中</div>
+        </div>
+        <label class="session">
+          <span>评分人</span>
+          <input id="participant" autocomplete="off" placeholder="姓名或编号">
+        </label>
+      </div>
+      <div class="progress-track" aria-hidden="true">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div id="error" class="error" hidden></div>
+
+    <section id="test" hidden>
+      <div class="task-meta">
+        <div>
+          <h2 id="taskTitle"></h2>
+          <p id="taskFocus" class="muted"></p>
+        </div>
+        <span id="stemLabel" class="stem-label"></span>
+      </div>
+
+      <div class="reference">
+        <strong>原曲参考</strong>
+        <audio id="mixture" controls preload="metadata"></audio>
+        <label class="loop-control">
+          <input id="loopAll" type="checkbox" checked>
+          <span>循环</span>
+        </label>
+      </div>
+
+      <div id="candidates" class="candidates"></div>
+
+      <section class="preference">
+        <h3>这一题最适合用于编舞听辨的是</h3>
+        <div id="preferenceChoices" class="choice-row"></div>
+        <p id="validation" class="validation"></p>
+      </section>
+
+      <div class="actions">
+        <button id="previous" type="button">上一题</button>
+        <button id="next" class="primary" type="button">下一题</button>
+      </div>
+    </section>
+
+    <section id="complete" class="complete" hidden>
+      <h2>测评完成</h2>
+      <p class="muted">以下结果已揭盲。正式汇总以导出的 JSON 为准。</p>
+      <div id="summary"></div>
+      <div class="actions">
+        <button id="restart" type="button">新一轮测评</button>
+        <button id="export" class="primary" type="button">导出结果 JSON</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const STEM_NAMES = {
+      vocals: "人声轨",
+      drums: "鼓轨",
+      bass: "贝斯轨",
+      other: "其他 / 旋律轨",
+    };
+
+    const state = {
+      manifest: null,
+      taskOrder: [],
+      assignments: {},
+      responses: {},
+      current: 0,
+      participant: "",
+      startedAt: null,
+      completedAt: null,
+      storageKey: "",
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function manifestSignature(manifest) {
+      const tasks = manifest.tasks.map((task) => task.id).join(",");
+      const models = manifest.models.map((model) => model.id).join(",");
+      return `${manifest.version}|${tasks}|${models}`;
+    }
+
+    function save() {
+      localStorage.setItem(state.storageKey, JSON.stringify({
+        signature: manifestSignature(state.manifest),
+        taskOrder: state.taskOrder,
+        assignments: state.assignments,
+        responses: state.responses,
+        current: state.current,
+        participant: state.participant,
+        startedAt: state.startedAt,
+        completedAt: state.completedAt,
+      }));
+    }
+
+    function initializeSession(manifest) {
+      state.manifest = manifest;
+      state.storageKey = `choreo-separation-benchmark-v${manifest.version}`;
+      const signature = manifestSignature(manifest);
+      const saved = JSON.parse(localStorage.getItem(state.storageKey) || "null");
+      if (saved && saved.signature === signature) {
+        Object.assign(state, saved);
+        state.manifest = manifest;
+        state.storageKey = `choreo-separation-benchmark-v${manifest.version}`;
+        return;
+      }
+
+      state.taskOrder = shuffle(manifest.tasks.map((task) => task.id));
+      state.startedAt = new Date().toISOString();
+      for (const task of manifest.tasks) {
+        state.assignments[task.id] = shuffle(task.candidates).map(
+          (candidate, index) => ({
+            alias: String.fromCharCode(65 + index),
+            model_id: candidate.model_id,
+            model_label: candidate.model_label,
+            audio_url: candidate.audio_url,
+          })
+        );
+        state.responses[task.id] = {
+          ratings: {},
+          preferred_alias: "",
+        };
+      }
+      save();
+    }
+
+    function taskById(taskId) {
+      return state.manifest.tasks.find((task) => task.id === taskId);
+    }
+
+    function currentTask() {
+      return taskById(state.taskOrder[state.current]);
+    }
+
+    function pauseOtherAudio(active) {
+      document.querySelectorAll("audio").forEach((audio) => {
+        if (audio !== active) audio.pause();
+      });
+    }
+
+    function audioElement(src, label) {
+      const audio = document.createElement("audio");
+      audio.controls = true;
+      audio.preload = "metadata";
+      audio.src = src;
+      audio.setAttribute("aria-label", label);
+      audio.loop = $("loopAll").checked;
+      audio.addEventListener("play", () => pauseOtherAudio(audio));
+      return audio;
+    }
+
+    function ratingControl(taskId, alias, dimension) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "rating";
+      const response = state.responses[taskId];
+      const existing = response.ratings[alias]?.[dimension.id];
+
+      const header = document.createElement("div");
+      header.className = "rating-head";
+      const label = document.createElement("label");
+      const inputId = `${taskId}-${alias}-${dimension.id}`;
+      label.htmlFor = inputId;
+      label.textContent = dimension.label;
+      const score = document.createElement("span");
+      score.className = `score${existing ? "" : " empty"}`;
+      score.textContent = existing || "未评";
+      header.append(label, score);
+
+      const description = document.createElement("p");
+      description.className = "rating-description";
+      description.textContent = dimension.description || "";
+
+      const input = document.createElement("input");
+      input.type = "range";
+      input.id = inputId;
+      input.min = "1";
+      input.max = "5";
+      input.step = "1";
+      input.value = existing || "3";
+      input.addEventListener("input", () => {
+        if (!response.ratings[alias]) response.ratings[alias] = {};
+        response.ratings[alias][dimension.id] = Number(input.value);
+        score.textContent = input.value;
+        score.classList.remove("empty");
+        $("validation").textContent = "";
+        save();
+      });
+
+      const scale = document.createElement("div");
+      scale.className = "rating-scale";
+      scale.innerHTML = `<span>${dimension.low}</span><span>${dimension.high}</span>`;
+      wrapper.append(header, description, input, scale);
+      return wrapper;
+    }
+
+    function candidatePanel(task, assignment) {
+      const section = document.createElement("section");
+      section.className = "candidate";
+      const heading = document.createElement("h3");
+      heading.textContent = `方案 ${assignment.alias}`;
+      section.append(
+        heading,
+        audioElement(assignment.audio_url, `方案 ${assignment.alias}`)
+      );
+      for (const dimension of state.manifest.dimensions) {
+        section.append(ratingControl(task.id, assignment.alias, dimension));
+      }
+      return section;
+    }
+
+    function preferenceOption(taskId, value, labelText) {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = `preferred-${taskId}`;
+      input.value = value;
+      input.checked = state.responses[taskId].preferred_alias === value;
+      input.addEventListener("change", () => {
+        state.responses[taskId].preferred_alias = value;
+        $("validation").textContent = "";
+        save();
+      });
+      const text = document.createElement("span");
+      text.textContent = labelText;
+      label.append(input, text);
+      return label;
+    }
+
+    function renderTask() {
+      document.querySelectorAll("audio").forEach((audio) => audio.pause());
+      const task = currentTask();
+      const assignments = state.assignments[task.id];
+      $("taskTitle").textContent = task.title;
+      $("taskFocus").textContent = task.focus;
+      $("stemLabel").textContent = STEM_NAMES[task.stem] || task.stem;
+      $("mixture").src = task.mixture_url;
+      $("mixture").loop = $("loopAll").checked;
+
+      const candidates = $("candidates");
+      candidates.replaceChildren();
+      candidates.dataset.count = String(assignments.length);
+      for (const assignment of assignments) {
+        candidates.append(candidatePanel(task, assignment));
+      }
+
+      const choices = $("preferenceChoices");
+      choices.replaceChildren();
+      for (const assignment of assignments) {
+        choices.append(preferenceOption(
+          task.id,
+          assignment.alias,
+          `方案 ${assignment.alias}`
+        ));
+      }
+      choices.append(
+        preferenceOption(task.id, "tie", "差不多"),
+        preferenceOption(task.id, "none", "都不可用")
+      );
+
+      $("previous").disabled = state.current === 0;
+      $("next").textContent = (
+        state.current === state.taskOrder.length - 1 ? "完成测评" : "下一题"
+      );
+      $("validation").textContent = "";
+      updateProgress();
+      save();
+    }
+
+    function updateProgress() {
+      const total = state.taskOrder.length;
+      $("progressText").textContent = `第 ${state.current + 1} / ${total} 题`;
+      $("progressBar").style.width = `${((state.current + 1) / total) * 100}%`;
+    }
+
+    function validateCurrent() {
+      const task = currentTask();
+      const response = state.responses[task.id];
+      for (const assignment of state.assignments[task.id]) {
+        const ratings = response.ratings[assignment.alias] || {};
+        for (const dimension of state.manifest.dimensions) {
+          if (!ratings[dimension.id]) {
+            return `方案 ${assignment.alias} 的“${dimension.label}”尚未评分`;
+          }
+        }
+      }
+      if (!response.preferred_alias) return "请选择本题更适合的方案";
+      if (!state.participant.trim()) return "请填写评分人姓名或编号";
+      return "";
+    }
+
+    function completedPayload() {
+      return {
+        version: 1,
+        benchmark_manifest_version: state.manifest.version,
+        participant: state.participant.trim(),
+        started_at: state.startedAt,
+        completed_at: state.completedAt,
+        dimensions: state.manifest.dimensions,
+        responses: state.taskOrder.map((taskId) => {
+          const task = taskById(taskId);
+          const response = state.responses[taskId];
+          return {
+            task_id: task.id,
+            clip_id: task.clip_id,
+            stem: task.stem,
+            assignments: state.assignments[taskId].map((item) => ({
+              alias: item.alias,
+              model_id: item.model_id,
+            })),
+            ratings: response.ratings,
+            preferred_alias: response.preferred_alias,
+          };
+        }),
+      };
+    }
+
+    function renderSummary() {
+      const scores = {};
+      for (const taskId of state.taskOrder) {
+        const response = state.responses[taskId];
+        const assignmentMap = Object.fromEntries(
+          state.assignments[taskId].map((item) => [item.alias, item])
+        );
+        for (const [alias, ratings] of Object.entries(response.ratings)) {
+          const modelId = assignmentMap[alias].model_id;
+          if (!scores[modelId]) scores[modelId] = {};
+          for (const [metric, value] of Object.entries(ratings)) {
+            if (!scores[modelId][metric]) scores[modelId][metric] = [];
+            scores[modelId][metric].push(value);
+          }
+        }
+      }
+
+      const labels = Object.fromEntries(
+        state.manifest.models.map((model) => [model.id, model.label])
+      );
+      const table = document.createElement("table");
+      table.className = "summary-table";
+      const header = document.createElement("tr");
+      header.innerHTML = [
+        "<th>模型</th>",
+        ...state.manifest.dimensions.map(
+          (dimension) => `<th>${dimension.summary_label || dimension.label}</th>`
+        ),
+      ].join("");
+      table.append(header);
+      for (const [modelId, metrics] of Object.entries(scores)) {
+        const row = document.createElement("tr");
+        const values = state.manifest.dimensions.map((dimension) => {
+          const items = metrics[dimension.id] || [];
+          const average = items.reduce((sum, value) => sum + value, 0) / items.length;
+          return `<td>${average.toFixed(2)}</td>`;
+        });
+        row.innerHTML = `<td>${labels[modelId] || modelId}</td>${values.join("")}`;
+        table.append(row);
+      }
+      $("summary").replaceChildren(table);
+      $("test").hidden = true;
+      $("complete").hidden = false;
+      $("progressText").textContent = `${state.taskOrder.length} / ${state.taskOrder.length} 题已完成`;
+      $("progressBar").style.width = "100%";
+    }
+
+    function exportResults() {
+      const payload = completedPayload();
+      const blob = new Blob(
+        [JSON.stringify(payload, null, 2)],
+        { type: "application/json" }
+      );
+      const link = document.createElement("a");
+      const safeParticipant = payload.participant.replace(/[^\w\u4e00-\u9fff-]+/g, "_");
+      link.href = URL.createObjectURL(blob);
+      link.download = `blind_result_${safeParticipant}_${Date.now()}.json`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    async function boot() {
+      try {
+        const response = await fetch("./work/manifest.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`manifest HTTP ${response.status}`);
+        const manifest = await response.json();
+        if (!manifest.tasks?.length) {
+          throw new Error("没有可比较的任务；至少需要两个模型的完整四轨输出。");
+        }
+        initializeSession(manifest);
+        $("participant").value = state.participant;
+        $("test").hidden = false;
+        if (state.completedAt) {
+          renderSummary();
+        } else {
+          renderTask();
+        }
+      } catch (error) {
+        $("error").hidden = false;
+        $("error").textContent = `载入失败：${error.message}`;
+        $("progressText").textContent = "不可用";
+      }
+    }
+
+    $("participant").addEventListener("input", (event) => {
+      state.participant = event.target.value;
+      save();
+    });
+
+    $("loopAll").addEventListener("change", (event) => {
+      document.querySelectorAll("audio").forEach((audio) => {
+        audio.loop = event.target.checked;
+      });
+    });
+
+    $("previous").addEventListener("click", () => {
+      if (state.current > 0) {
+        state.current -= 1;
+        renderTask();
+      }
+    });
+
+    $("next").addEventListener("click", () => {
+      const error = validateCurrent();
+      if (error) {
+        $("validation").textContent = error;
+        return;
+      }
+      if (state.current < state.taskOrder.length - 1) {
+        state.current += 1;
+        renderTask();
+      } else {
+        state.completedAt = new Date().toISOString();
+        save();
+        renderSummary();
+      }
+    });
+
+    $("export").addEventListener("click", exportResults);
+    $("restart").addEventListener("click", () => {
+      localStorage.removeItem(state.storageKey);
+      window.location.reload();
+    });
+    boot();
+  </script>
+</body>
+</html>

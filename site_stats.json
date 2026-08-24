@@ -1,0 +1,13 @@
+{
+  "audio_file_count": 24,
+  "source_wav_bytes": 121453336,
+  "deployed_flac_bytes": 52604024,
+  "compression_ratio": 0.4331,
+  "task_bytes": {
+    "itsme_bass_leak__bass": 7258020,
+    "hip_bucket_boundary__bass": 9650414,
+    "hip_bucket_boundary__other": 12599336,
+    "armageddon_instability_a__other": 12808217,
+    "armageddon_instability_b__other": 13591807
+  }
+}

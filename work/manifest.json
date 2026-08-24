@@ -1,0 +1,208 @@
+{
+  "version": 1,
+  "generated_at": "2026-08-24T13:14:10.028182+00:00",
+  "dimensions": [
+    {
+      "id": "clarity",
+      "label": "这个声音清楚、好跟吗？",
+      "summary_label": "声音清楚",
+      "description": "只听题目指定的声音，看它是否容易辨认和跟随。",
+      "low": "1 很难听清",
+      "high": "5 清楚好跟"
+    },
+    {
+      "id": "isolation",
+      "label": "其它声音干扰少吗？",
+      "summary_label": "干扰少",
+      "description": "听听有没有别的声音串进来，妨碍你判断。",
+      "low": "1 干扰很大",
+      "high": "5 基本不干扰"
+    },
+    {
+      "id": "stability",
+      "label": "听起来稳定、自然吗？",
+      "summary_label": "稳定自然",
+      "description": "留意是否忽强忽弱、发虚、破碎或有奇怪水声。",
+      "low": "1 破碎或忽强忽弱",
+      "high": "5 稳定自然"
+    },
+    {
+      "id": "choreo_utility",
+      "label": "对找编舞动作有帮助吗？",
+      "summary_label": "编舞帮助",
+      "description": "它能不能帮助你找到动作落点或新的编舞切口？",
+      "low": "1 没有帮助",
+      "high": "5 很有帮助"
+    }
+  ],
+  "models": [
+    {
+      "id": "htdemucs",
+      "label": "HT-Demucs"
+    },
+    {
+      "id": "htdemucs_ft",
+      "label": "HT-Demucs FT"
+    },
+    {
+      "id": "umxhq",
+      "label": "Open-Unmix UMXHQ"
+    },
+    {
+      "id": "bs_roformer_musdb18hq",
+      "label": "BS-RoFormer MUSDB18HQ 4-stem"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "itsme_bass_leak__bass",
+      "clip_id": "itsme_bass_leak",
+      "title": "It's me - 低音旋律串音",
+      "stem": "bass",
+      "focus": "贝斯主体是否连续、清楚；高频旋律或人声残留是否干扰动作判断。",
+      "mixture_url": "work/clips/itsme_bass_leak.flac",
+      "candidates": [
+        {
+          "model_id": "htdemucs",
+          "model_label": "HT-Demucs",
+          "audio_url": "work/outputs/htdemucs/itsme_bass_leak/bass.flac"
+        },
+        {
+          "model_id": "htdemucs_ft",
+          "model_label": "HT-Demucs FT",
+          "audio_url": "work/outputs/htdemucs_ft/itsme_bass_leak/bass.flac"
+        },
+        {
+          "model_id": "umxhq",
+          "model_label": "Open-Unmix UMXHQ",
+          "audio_url": "work/outputs/umxhq/itsme_bass_leak/bass.flac"
+        },
+        {
+          "model_id": "bs_roformer_musdb18hq",
+          "model_label": "BS-RoFormer MUSDB18HQ 4-stem",
+          "audio_url": "work/outputs/bs_roformer_musdb18hq/itsme_bass_leak/bass.flac"
+        }
+      ]
+    },
+    {
+      "id": "hip_bucket_boundary__bass",
+      "clip_id": "hip_bucket_boundary",
+      "title": "HIP - 低音合成器分桶",
+      "stem": "bass",
+      "focus": "低音合成器是否在 bass/other 间被切碎；目标声音是否出现一断一断。",
+      "mixture_url": "work/clips/hip_bucket_boundary.flac",
+      "candidates": [
+        {
+          "model_id": "htdemucs",
+          "model_label": "HT-Demucs",
+          "audio_url": "work/outputs/htdemucs/hip_bucket_boundary/bass.flac"
+        },
+        {
+          "model_id": "htdemucs_ft",
+          "model_label": "HT-Demucs FT",
+          "audio_url": "work/outputs/htdemucs_ft/hip_bucket_boundary/bass.flac"
+        },
+        {
+          "model_id": "umxhq",
+          "model_label": "Open-Unmix UMXHQ",
+          "audio_url": "work/outputs/umxhq/hip_bucket_boundary/bass.flac"
+        },
+        {
+          "model_id": "bs_roformer_musdb18hq",
+          "model_label": "BS-RoFormer MUSDB18HQ 4-stem",
+          "audio_url": "work/outputs/bs_roformer_musdb18hq/hip_bucket_boundary/bass.flac"
+        }
+      ]
+    },
+    {
+      "id": "hip_bucket_boundary__other",
+      "clip_id": "hip_bucket_boundary",
+      "title": "HIP - 低音合成器分桶",
+      "stem": "other",
+      "focus": "低音合成器是否在 bass/other 间被切碎；目标声音是否出现一断一断。",
+      "mixture_url": "work/clips/hip_bucket_boundary.flac",
+      "candidates": [
+        {
+          "model_id": "htdemucs",
+          "model_label": "HT-Demucs",
+          "audio_url": "work/outputs/htdemucs/hip_bucket_boundary/other.flac"
+        },
+        {
+          "model_id": "htdemucs_ft",
+          "model_label": "HT-Demucs FT",
+          "audio_url": "work/outputs/htdemucs_ft/hip_bucket_boundary/other.flac"
+        },
+        {
+          "model_id": "umxhq",
+          "model_label": "Open-Unmix UMXHQ",
+          "audio_url": "work/outputs/umxhq/hip_bucket_boundary/other.flac"
+        },
+        {
+          "model_id": "bs_roformer_musdb18hq",
+          "model_label": "BS-RoFormer MUSDB18HQ 4-stem",
+          "audio_url": "work/outputs/bs_roformer_musdb18hq/hip_bucket_boundary/other.flac"
+        }
+      ]
+    },
+    {
+      "id": "armageddon_instability_a__other",
+      "clip_id": "armageddon_instability_a",
+      "title": "Armageddon - 音墙稳定性 A",
+      "stem": "other",
+      "focus": "复杂音墙中的旋律层是否稳定；是否忽强忽弱、发虚或出现水声伪影。",
+      "mixture_url": "work/clips/armageddon_instability_a.flac",
+      "candidates": [
+        {
+          "model_id": "htdemucs",
+          "model_label": "HT-Demucs",
+          "audio_url": "work/outputs/htdemucs/armageddon_instability_a/other.flac"
+        },
+        {
+          "model_id": "htdemucs_ft",
+          "model_label": "HT-Demucs FT",
+          "audio_url": "work/outputs/htdemucs_ft/armageddon_instability_a/other.flac"
+        },
+        {
+          "model_id": "umxhq",
+          "model_label": "Open-Unmix UMXHQ",
+          "audio_url": "work/outputs/umxhq/armageddon_instability_a/other.flac"
+        },
+        {
+          "model_id": "bs_roformer_musdb18hq",
+          "model_label": "BS-RoFormer MUSDB18HQ 4-stem",
+          "audio_url": "work/outputs/bs_roformer_musdb18hq/armageddon_instability_a/other.flac"
+        }
+      ]
+    },
+    {
+      "id": "armageddon_instability_b__other",
+      "clip_id": "armageddon_instability_b",
+      "title": "Armageddon - 音墙稳定性 B",
+      "stem": "other",
+      "focus": "连续乐句中的旋律能量是否稳定；串音和削弱是否妨碍找到编舞切口。",
+      "mixture_url": "work/clips/armageddon_instability_b.flac",
+      "candidates": [
+        {
+          "model_id": "htdemucs",
+          "model_label": "HT-Demucs",
+          "audio_url": "work/outputs/htdemucs/armageddon_instability_b/other.flac"
+        },
+        {
+          "model_id": "htdemucs_ft",
+          "model_label": "HT-Demucs FT",
+          "audio_url": "work/outputs/htdemucs_ft/armageddon_instability_b/other.flac"
+        },
+        {
+          "model_id": "umxhq",
+          "model_label": "Open-Unmix UMXHQ",
+          "audio_url": "work/outputs/umxhq/armageddon_instability_b/other.flac"
+        },
+        {
+          "model_id": "bs_roformer_musdb18hq",
+          "model_label": "BS-RoFormer MUSDB18HQ 4-stem",
+          "audio_url": "work/outputs/bs_roformer_musdb18hq/armageddon_instability_b/other.flac"
+        }
+      ]
+    }
+  ]
+}
