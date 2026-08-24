@@ -11,6 +11,10 @@ The site contains five listening tasks. Model and task order are randomized in
 the browser. Audio is precomputed and stored as lossless 24-bit FLAC; no model
 runs in the browser.
 
+The complete audio package is 50.2 MiB. A task references 6.9-13.0 MiB across
+the original excerpt and four candidates, but the browser initially requests
+metadata and downloads each audio file when the participant plays it.
+
 ## Test URL
 
 https://chaonannn-a11y.github.io/-benchmark/
