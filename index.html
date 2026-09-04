@@ -125,29 +125,12 @@
     }
 
     .task-meta {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: start;
-      gap: 24px;
       padding-bottom: 20px;
       border-bottom: 1px solid var(--line);
     }
 
-    .task-meta p {
+    .task-meta h2 {
       margin-bottom: 0;
-      max-width: 760px;
-    }
-
-    .stem-label {
-      display: inline-flex;
-      align-items: center;
-      min-height: 30px;
-      padding: 4px 10px;
-      border: 1px solid #b9c3bd;
-      border-radius: 999px;
-      background: var(--surface);
-      font-weight: 650;
-      white-space: nowrap;
     }
 
     .reference {
@@ -393,15 +376,11 @@
 
     <section id="test" hidden>
       <div class="task-meta">
-        <div>
-          <h2 id="taskTitle"></h2>
-          <p id="taskFocus" class="muted"></p>
-        </div>
-        <span id="stemLabel" class="stem-label"></span>
+        <h2 id="taskTitle"></h2>
       </div>
 
       <div class="reference">
-        <strong>原曲参考</strong>
+        <strong>先听原曲</strong>
         <audio id="mixture" controls preload="metadata"></audio>
         <label class="loop-control">
           <input id="loopAll" type="checkbox" checked>
@@ -435,13 +414,6 @@
   </main>
 
   <script>
-    const STEM_NAMES = {
-      vocals: "人声轨",
-      drums: "鼓轨",
-      bass: "贝斯轨",
-      other: "其他 / 旋律轨",
-    };
-
     const state = {
       manifest: null,
       taskOrder: [],
@@ -621,9 +593,7 @@
       document.querySelectorAll("audio").forEach((audio) => audio.pause());
       const task = currentTask();
       const assignments = state.assignments[task.id];
-      $("taskTitle").textContent = task.title;
-      $("taskFocus").textContent = task.focus;
-      $("stemLabel").textContent = STEM_NAMES[task.stem] || task.stem;
+      $("taskTitle").textContent = task.listener_title || task.title;
       $("mixture").src = task.mixture_url;
       $("mixture").loop = $("loopAll").checked;
 

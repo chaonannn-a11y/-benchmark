@@ -1,12 +1,12 @@
 {
-  "version": 1,
+  "version": 2,
   "generated_at": "2026-08-24T13:14:10.028182+00:00",
   "dimensions": [
     {
       "id": "clarity",
-      "label": "这个声音清楚、好跟吗？",
+      "label": "这一层清楚、好跟吗？",
       "summary_label": "声音清楚",
-      "description": "只听题目指定的声音，看它是否容易辨认和跟随。",
+      "description": "只听题目上方写明的层次，看它是否容易辨认和跟随。",
       "low": "1 很难听清",
       "high": "5 清楚好跟"
     },
@@ -14,7 +14,7 @@
       "id": "isolation",
       "label": "其它声音干扰少吗？",
       "summary_label": "干扰少",
-      "description": "听听有没有别的声音串进来，妨碍你判断。",
+      "description": "这一层是否能独立听清，不被其它声音影响。",
       "low": "1 干扰很大",
       "high": "5 基本不干扰"
     },
@@ -22,7 +22,7 @@
       "id": "stability",
       "label": "听起来稳定、自然吗？",
       "summary_label": "稳定自然",
-      "description": "留意是否忽强忽弱、发虚、破碎或有奇怪水声。",
+      "description": "这一层从头到尾是否连贯、自然。",
       "low": "1 破碎或忽强忽弱",
       "high": "5 稳定自然"
     },
@@ -58,6 +58,7 @@
       "id": "itsme_bass_leak__bass",
       "clip_id": "itsme_bass_leak",
       "title": "It's me - 低音旋律串音",
+      "listener_title": "It's me · 低音（Bass）",
       "stem": "bass",
       "focus": "贝斯主体是否连续、清楚；高频旋律或人声残留是否干扰动作判断。",
       "mixture_url": "work/clips/itsme_bass_leak.flac",
@@ -88,6 +89,7 @@
       "id": "hip_bucket_boundary__bass",
       "clip_id": "hip_bucket_boundary",
       "title": "HIP - 低音合成器分桶",
+      "listener_title": "HIP · 低音（Bass）",
       "stem": "bass",
       "focus": "低音合成器是否在 bass/other 间被切碎；目标声音是否出现一断一断。",
       "mixture_url": "work/clips/hip_bucket_boundary.flac",
@@ -118,6 +120,7 @@
       "id": "hip_bucket_boundary__other",
       "clip_id": "hip_bucket_boundary",
       "title": "HIP - 低音合成器分桶",
+      "listener_title": "HIP · 旋律 / 伴奏层",
       "stem": "other",
       "focus": "低音合成器是否在 bass/other 间被切碎；目标声音是否出现一断一断。",
       "mixture_url": "work/clips/hip_bucket_boundary.flac",
@@ -148,6 +151,7 @@
       "id": "armageddon_instability_a__other",
       "clip_id": "armageddon_instability_a",
       "title": "Armageddon - 音墙稳定性 A",
+      "listener_title": "Armageddon · 这部分旋律（片段 A）",
       "stem": "other",
       "focus": "复杂音墙中的旋律层是否稳定；是否忽强忽弱、发虚或出现水声伪影。",
       "mixture_url": "work/clips/armageddon_instability_a.flac",
@@ -178,6 +182,7 @@
       "id": "armageddon_instability_b__other",
       "clip_id": "armageddon_instability_b",
       "title": "Armageddon - 音墙稳定性 B",
+      "listener_title": "Armageddon · 这部分旋律（片段 B）",
       "stem": "other",
       "focus": "连续乐句中的旋律能量是否稳定；串音和削弱是否妨碍找到编舞切口。",
       "mixture_url": "work/clips/armageddon_instability_b.flac",
